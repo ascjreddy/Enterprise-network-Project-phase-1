@@ -1,4 +1,4 @@
-# Enterprise Network Security & Traffic Control Lab
+# Enterprise Network Security & Traffic Control 
 
 Virtualized multi-zone enterprise network built on OPNsense — implementing zone-based firewall policy, QoS traffic shaping, Ansible automation via REST API, and Python-based health monitoring with Slack alerting. Every security control is verified with packet captures and firewall logs. Every bandwidth claim is backed by iperf3 measurements.
 
