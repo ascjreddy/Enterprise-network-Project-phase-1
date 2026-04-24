@@ -1,0 +1,81 @@
+---
+- name: Deploy OPNsense Firewall Rules
+  hosts: localhost
+  gather_facts: no
+
+  vars:
+    opnsense_url: "https://192.168.10.1"
+    api_key: "xxxxxxxxxxxxxxxxxxxxxxxxx"
+    api_secret: "xxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+
+  tasks:
+    - name: Block Guest to LAN
+      uri:
+        url: "{{ opnsense_url }}/api/firewall/filter/addRule"
+        method: POST
+        user: "{{ api_key }}"
+        password: "{{ api_secret }}"
+        force_basic_auth: yes
+        validate_certs: no
+        body_format: json
+        body:
+          rule:
+            type: "block"
+            interface: "opt1"
+            ipprotocol: "inet"
+            source_net: "192.168.20.0/24"
+            destination_net: "192.168.10.0/24"
+            description: "Block Guest to LAN"
+
+    - name: Allow LAN to DMZ SSH
+      uri:
+        url: "{{ opnsense_url }}/api/firewall/filter/addRule"
+        method: POST
+        user: "{{ api_key }}"
+        password: "{{ api_secret }}"
+        force_basic_auth: yes
+        validate_certs: no
+        body_format: json
+        body:
+          rule:
+            type: "pass"
+            interface: "lan"
+            ipprotocol: "inet"
+            protocol: "tcp"
+            source_net: "192.168.10.0/24"
+            destination_net: "192.168.30.10"
+            destination_port: "22"
+            description: "Allow LAN to DMZ SSH"
+
+    - name: Apply firewall rules
+      uri:
+        url: "{{ opnsense_url }}/api/firewall/filter/apply"
+        method: POST
+        user: "{{ api_key }}"
+        password: "{{ api_secret }}"
+        force_basic_auth: yes
+        validate_certs: no
+        body_format: json
+        body: {}
+
+    - name: Print results
+      debug:
+        msg: "Firewall rules deployed successfully"
+
+    - name: Block Guest to DMZ
+      uri:
+        url: "{{ opnsense_url }}/api/firewall/filter/addRule"
+        method: POST
+        user: "{{ api_key }}"
+        password: "{{ api_secret }}"
+        force_basic_auth: yes
+        validate_certs: no
+        body_format: json
+        body:
+          rule:
+            type: "block"
+            interface: "opt1"
+            ipprotocol: "inet"
+            source_net: "192.168.20.0/24"
+            destination_net: "192.168.30.0/24"
+            description: "Block Guest to DMZ"
