@@ -5,8 +5,8 @@
 
   vars:
     opnsense_url: "https://192.168.10.1"
-    api_key: "xxxxxxxxxxxxxxxxxxxxxxxxx"
-    api_secret: "xxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+    api_key: API_KEY
+    api_secret: API_SECRET
 
   tasks:
     - name: Block Guest to LAN
